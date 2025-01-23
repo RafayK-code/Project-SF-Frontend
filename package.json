@@ -42,6 +42,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@babel/plugin-transform-class-properties": "^7.25.9",
+    "@babel/plugin-transform-nullish-coalescing-operator": "^7.26.6",
+    "@babel/plugin-transform-optional-chaining": "^7.25.9",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "@types/react-test-renderer": "^18.3.0",
