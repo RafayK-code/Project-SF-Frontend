@@ -26,7 +26,9 @@ export default function MessagingScreen() {
       {/* Input Bar */}
       <View style={styles.inputContainer}>
         <TextInput style={styles.input} placeholder="Type a message..." />
-        <Button title="Send" onPress={() => {}} />
+        <TouchableOpacity onPress={() => {}}>
+          <Text style={styles.sendButton}>SEND</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -46,6 +48,10 @@ const styles = StyleSheet.create({
   backButton: {
     fontSize: 16,
     color: '#7c878f',
+  },
+  sendButton: {
+    fontSize: 18,
+    color: '#a482c6',
   },
   messagesContainer: {
     flex: 1,
