@@ -2,9 +2,12 @@ import { Text, View, StyleSheet, Image } from "react-native";
 
 import ActionButton from "../components/ActionButton";
 import ClickableText from "../components/ClickableText";
+import { useRouter } from "expo-router";
 const background = require("../assets/images/BackgroundImg.png");
 
 function Login() {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
       <Image source={background} style={styles.backgroundImg}></Image>
@@ -21,8 +24,13 @@ function Login() {
 
         <View style={{ height: "25%" }}></View>
 
-        <ActionButton text="Sign In" onClick={() => {}}></ActionButton>
-
+        {/* navigate to home for now */}
+        <ActionButton
+          text="Sign In"
+          onClick={() => {
+            router.push("/(tabs)");
+          }}
+        ></ActionButton>
         <ClickableText
           text="Forgot Password?"
           onClick={() => {}}
