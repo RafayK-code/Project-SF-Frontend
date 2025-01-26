@@ -1,4 +1,5 @@
 import { Text, View } from "react-native";
+import ProfileScreen from "../../screens/Profile";
 
 export default function Profile() {
   return (
@@ -6,6 +7,8 @@ export default function Profile() {
       style={{
         flex: 1,
       }}
-    ></View>
+    >
+      <ProfileScreen />
+    </View>
   );
 }

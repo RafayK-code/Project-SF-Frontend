@@ -28,7 +28,7 @@ const ProfileScreen = () => {
       <View style={styles.overlay} />
       <View style={{ alignItems: "center", marginTop: 50 }}>
         <Image
-          source={require("../../assets/images/adaptive-icon.png")}
+          source={require("../assets/images/adaptive-icon.png")}
           style={{
             width: 100,
             height: 100,
@@ -53,7 +53,7 @@ const ProfileScreen = () => {
         style={styles.optionContainer}
       >
         <Text style={styles.optionText}>Edit Details</Text>
-        <Text style={styles.arrowIcon}>V</Text>{" "}
+        <Text style={styles.arrowIcon}>V</Text>
         {/*for now until we decide what icons we are going to use  */}
       </TouchableOpacity>
 
