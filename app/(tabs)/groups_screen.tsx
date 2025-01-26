@@ -1,4 +1,4 @@
-import { StyleSheet, Platform, TouchableOpacity, Text, View, TextInput, SafeAreaView, FlatList } from 'react-native';
+import { StyleSheet, Platform, TouchableOpacity, Text, View, TextInput, SafeAreaView, FlatList, ScrollView } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { IconSymbol } from '@/components/ui/IconSymbol';
@@ -36,26 +36,27 @@ const CourseGroupChatsScreen = () => {
 
   return (
     <ThemedView style={styles.container}>
-      <SafeAreaView>
+      <SafeAreaView style={styles.safeAreaContainer}>
         <View style={styles.header}>
           <IconSymbol name="menu" size={24} style={styles.icon} />
           <ThemedText style={styles.title}>Course Group Chats</ThemedText>
           <IconSymbol name="search" size={24} style={styles.icon} />
         </View>
-      </SafeAreaView>
-      <View style={styles.searchBarContainer}>
-        <TextInput
-          style={styles.searchBar}
-          placeholder="Search by course code or name"
-          placeholderTextColor="#888"
+        <View style={styles.searchBarContainer}>
+          <TextInput
+            style={styles.searchBar}
+            placeholder="Search by course code or name"
+            placeholderTextColor="#888"
+          />
+        </View>
+        {/* Ensure the FlatList is inside a scrollable container */}
+        <FlatList
+          data={courses}
+          renderItem={renderCourseItem}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.listContainer}
         />
-      </View>
-      <FlatList
-        data={courses}
-        renderItem={renderCourseItem}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContainer}
-      />
+      </SafeAreaView>
       <View style={styles.bottomNavBar}>
         <TouchableOpacity style={styles.navItem}>
           <IconSymbol name="home" size={24} style={styles.navIcon} />
@@ -82,6 +83,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  safeAreaContainer: {
+    flex: 1, // Ensures SafeAreaView stretches full screen height
   },
   header: {
     flexDirection: 'row',
@@ -111,7 +115,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   listContainer: {
-    flex: 1,
+    flexGrow: 1, // Ensures the list grows properly
     paddingHorizontal: 16,
   },
   courseItem: {
