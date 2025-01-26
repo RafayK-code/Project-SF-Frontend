@@ -1,4 +1,4 @@
-import { StyleSheet, Platform, TouchableOpacity, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Platform, TouchableOpacity, Text, View, TextInput, SafeAreaView, FlatList } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { IconSymbol } from '@/components/ui/IconSymbol';
@@ -9,15 +9,40 @@ const CourseGroupChatsScreen = () => {
     { id: 2, name: 'COURSE 201: Intermediate Studies', members: 98 },
     { id: 3, name: 'COURSE 301: Advanced Topics', members: 75 },
     { id: 4, name: 'COURSE 401: Specialization', members: 53 },
+    { id: 5, name: 'COURSE 501: Expert Studies', members: 60 },
+    { id: 6, name: 'COURSE 601: Research Methods', members: 80 },
+    { id: 7, name: 'COURSE 701: Machine Learning', members: 90 },
+    { id: 8, name: 'COURSE 801: Artificial Intelligence', members: 110 },
+    { id: 9, name: 'COURSE 901: Quantum Computing', members: 45 },
+    { id: 10, name: 'COURSE 1001: Data Structures', members: 130 },
+    { id: 11, name: 'COURSE 1101: Web Development', members: 140 },
+    { id: 12, name: 'COURSE 1201: Mobile App Development', members: 150 },
+    { id: 13, name: 'COURSE 1301: Cloud Computing', members: 85 },
+    { id: 14, name: 'COURSE 1401: Cyber Security', members: 92 },
+    { id: 15, name: 'COURSE 1501: Computer Networks', members: 78 },
   ];
+
+  const renderCourseItem = ({ item }) => (
+    <TouchableOpacity key={item.id} style={styles.courseItem}>
+      <View style={styles.courseTextContainer}>
+        <ThemedText style={styles.courseName}>{item.name}</ThemedText>
+        <ThemedText style={styles.courseMembers}>
+          Active members: {item.members}
+        </ThemedText>
+      </View>
+      <IconSymbol name="chevron-right" size={24} style={styles.chevronIcon} />
+    </TouchableOpacity>
+  );
 
   return (
     <ThemedView style={styles.container}>
-      <View style={styles.header}>
-        <IconSymbol name="menu" size={24} style={styles.icon} />
-        <ThemedText style={styles.title}>Course Group Chats</ThemedText>
-        <IconSymbol name="search" size={24} style={styles.icon} />
-      </View>
+      <SafeAreaView>
+        <View style={styles.header}>
+          <IconSymbol name="menu" size={24} style={styles.icon} />
+          <ThemedText style={styles.title}>Course Group Chats</ThemedText>
+          <IconSymbol name="search" size={24} style={styles.icon} />
+        </View>
+      </SafeAreaView>
       <View style={styles.searchBarContainer}>
         <TextInput
           style={styles.searchBar}
@@ -25,19 +50,12 @@ const CourseGroupChatsScreen = () => {
           placeholderTextColor="#888"
         />
       </View>
-      <View style={styles.listContainer}>
-        {courses.map((course) => (
-          <TouchableOpacity key={course.id} style={styles.courseItem}>
-            <View style={styles.courseTextContainer}>
-              <ThemedText style={styles.courseName}>{course.name}</ThemedText>
-              <ThemedText style={styles.courseMembers}>
-                Active members: {course.members}
-              </ThemedText>
-            </View>
-            <IconSymbol name="chevron-right" size={24} style={styles.chevronIcon} />
-          </TouchableOpacity>
-        ))}
-      </View>
+      <FlatList
+        data={courses}
+        renderItem={renderCourseItem}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.listContainer}
+      />
       <View style={styles.bottomNavBar}>
         <TouchableOpacity style={styles.navItem}>
           <IconSymbol name="home" size={24} style={styles.navIcon} />
