@@ -12,8 +12,11 @@ import {
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { IconSymbol } from "@/components/ui/IconSymbol";
+import { useRouter } from "expo-router";
 
 const CourseGroupChatsScreen = () => {
+  const router = useRouter();
+
   const courses = [
     { id: 1, name: "COURSE 101: Introduction", members: 120 },
     { id: 2, name: "COURSE 201: Intermediate Studies", members: 98 },
@@ -33,7 +36,21 @@ const CourseGroupChatsScreen = () => {
   ];
 
   const renderCourseItem = ({ item }) => (
-    <TouchableOpacity key={item.id} style={styles.courseItem}>
+    <TouchableOpacity
+      key={item.id}
+      style={styles.courseItem}
+      onPress={() =>
+        router.push({
+          pathname: "/messaging",
+          params: {
+            title: item.title,
+            date: item.date,
+            time: item.time,
+            text: item.text,
+          },
+        })
+      }
+    >
       <View style={styles.courseTextContainer}>
         <ThemedText style={styles.courseName}>{item.name}</ThemedText>
         <ThemedText style={styles.courseMembers}>
