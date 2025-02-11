@@ -1,6 +1,5 @@
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Svg, { Path } from "react-native-svg"
-import { MessageThreadInfo } from "../../app/inbox"
 
 interface MessageThreadProps {
     label: string,

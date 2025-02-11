@@ -1,5 +1,4 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
-import { useAnimatedStyle } from "react-native-reanimated"
 
 interface SingleFilterProps {
     active: boolean,
