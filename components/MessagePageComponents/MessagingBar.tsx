@@ -30,6 +30,7 @@ function MessagingBar(props: MessagingBarProps) {
                     placeholderTextColor="#3D404A80"
                     value={props.message}
                     onChangeText={text => props.setMessage(text)}
+                    multiline={true}
                 />
                 {/* Send Button */}
                 <TouchableOpacity onPress={props.sendMessage}>
@@ -66,7 +67,7 @@ const AttachSVG = () => {
 const styles = StyleSheet.create({
     inputContainer: {
         flexDirection: "row",
-        alignItems: "center",
+        alignItems: "flex-end",
         padding: 8,
         backgroundColor: "#FDFBF1",
     },
@@ -82,13 +83,12 @@ const styles = StyleSheet.create({
         borderColor: "#193C30A0"
     },
     attachButton: {
-        height: 40,
+        height: 45,
         width: 40,
         marginHorizontal: 10,
-
     },
     sendButton: {
-        height: 30,
+        height: 45,
         width: 30,
     },
 });
