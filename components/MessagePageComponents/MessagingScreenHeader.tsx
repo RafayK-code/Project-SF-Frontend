@@ -2,10 +2,10 @@ import {
     View,
     Text,
     StyleSheet,
-    TouchableOpacity
 } from "react-native";
 
 import EllipseButton from "./EllipseButton";
+import PageBackButton from "../PageBackButton";
 
 interface MessagingScreenHeaderProps {
     groupName: String,
@@ -26,12 +26,7 @@ function MessageScreenHeader(props: MessagingScreenHeaderProps) {
         <>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={goBack}
-                >
-                    <Text style={styles.backButtonText}>←</Text>
-                </TouchableOpacity>
+                <PageBackButton onClick={goBack}></PageBackButton>
 
                 <Text style={styles.headerText}>{props.groupName}</Text>
 
@@ -51,28 +46,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: "#193C3D70",
     },
-    backButton: {
-        padding: 5,
-
-    },
-    backButtonText: {
-        fontSize: 30,
-        color: "#193C30",
-
-    },
     headerText: {
         flex: 1,
         fontSize: 30,
         fontWeight: 800,
         color: "#193C3D",
         marginLeft: 10,
-    },
-    menuButton: {
-        padding: 5,
-    },
-    menuButtonText: {
-        fontSize: 20,
-        color: "#000",
-        fontWeight: "bold",
-    },
+    }
 })
