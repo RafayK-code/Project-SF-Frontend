@@ -5,12 +5,16 @@ import InboxFilter from "../components/InboxComponents/InboxFilter";
 import MessageThread from "../components/InboxComponents/MessageThread";
 import { useState } from "react";
 
+
+// if username is defined then courseCode and threadName should be undefined
+// if courseCode or threadName are defined both have to be defined and username needs to be undefined
 export interface MessageThreadInfo {
-    label: string
     mostRecentMessage: string
     timeMessageSent: number
     read: boolean,
-    isDirectMessage: boolean,
+    username?: string
+    courseCode?: string
+    threadName?: string
 }
 
 function Inbox() {
@@ -53,7 +57,7 @@ function Inbox() {
         //if the key is dms then return all the dms
         if (searchKey == "Direct Messages") {
             data.forEach((thread: MessageThreadInfo) => {
-                if (thread.isDirectMessage) {
+                if (thread.username != undefined) {
                     result.push(thread)
                 }
             })
@@ -61,12 +65,25 @@ function Inbox() {
         } else {
             //returns all the threads where their label is contains the search key
             data.forEach((thread: MessageThreadInfo) => {
-                if (thread.label.toLocaleLowerCase().includes(searchKey.toLocaleLowerCase())) {
+                const searchInCourseCode = compareToSearchKey(thread.courseCode)
+                const searchInUsername = compareToSearchKey(thread.username)
+                const searchInThreadName = compareToSearchKey(thread.threadName)
+
+                if (searchInCourseCode || searchInThreadName || searchInUsername) {
                     result.push(thread)
                 }
             })
             return result
         }
+    }
+    const compareToSearchKey = (key: string | undefined): boolean => {
+        if (key == undefined) {
+            return false
+        }
+        const lowerKey: string = key.toLowerCase()
+        const lowerSearchKey: string = searchKey.toLowerCase()
+
+        return lowerKey.includes(lowerSearchKey)
     }
 
     const getFilters = (): string[] => {
@@ -76,8 +93,10 @@ function Inbox() {
         //looks at all threads and if it is not in the filters already add it, makes sure 
         // its not a dm too
         messageData.forEach((thread: MessageThreadInfo) => {
-            if (!filters.includes(thread.label) && !thread.isDirectMessage) {
-                filters.push(thread.label)
+            if (thread.courseCode != undefined) {
+                if (!filters.includes(thread.courseCode)) {
+                    filters.push(thread.courseCode)
+                }
             }
         })
 
@@ -98,8 +117,20 @@ function Inbox() {
                 <ScrollView style={styles.threadsContainer}>
                     {
                         getMessageThreads().map((thread: MessageThreadInfo, index: number) => {
+                            const threadLabel: string = ((): string => {
+                                if (thread.threadName != undefined) {
+                                    return thread.threadName
+                                }
+
+                                if (thread.username != undefined) {
+                                    return thread.username
+                                }
+
+                                // if the objects is in a invalid format then return 
+                                return "Invalid"
+                            })()
                             return <MessageThread
-                                label={thread.label}
+                                label={threadLabel}
                                 mostRecentMessageContent={thread.mostRecentMessage}
                                 timeMessageSent={thread.timeMessageSent}
                                 read={thread.read}
@@ -130,81 +161,79 @@ const testfilters = ["Direct Messages", "COMPSCI 2211", "PHIL 2073", "STATS 2244
 // [31556952000, 2629746000, 604800000, 86400000, 3600000, 60000, 1000]
 const testData: MessageThreadInfo[] = [
     {
-        label: "COMPSCI 1027",
+        threadName: "Compute sciences gc",
         mostRecentMessage: "you where are we meeting up",
         timeMessageSent: Date.now(),
         read: false,
-        isDirectMessage: false,
-    }, {
-        label: "COMPSCI 1027",
+        courseCode: "CS1027"
+    },
+    {
+        threadName: "cool cs chat",
         mostRecentMessage: "you where are we meeting up, this one is long to test how long text react",
         timeMessageSent: Date.now() - 31556952000,
         read: false,
-        isDirectMessage: false,
+        courseCode: "CS1027"
     },
     {
-        label: "COMPSCI 1027",
-        mostRecentMessage: "you where are we meeting up",
-        timeMessageSent: Date.now() - 2629746000,
-        read: false,
-        isDirectMessage: false,
-    },
-    {
-        label: "COMPSCI 1027",
-        mostRecentMessage: "you where are we meeting up",
-        timeMessageSent: Date.now() - 604800000,
+        threadName: "differetn cs chat",
+        mostRecentMessage: "you where are we meeting up, this one is long to test how long text react",
+        timeMessageSent: Date.now() - 31556952000,
         read: true,
-        isDirectMessage: false,
-
+        courseCode: "CS1027"
     },
     {
-        label: "COMPSCI 1027",
-        mostRecentMessage: "you where are we meeting up",
-        timeMessageSent: Date.now() - 86400000,
-        read: true,
-        isDirectMessage: false,
-    },
-    {
-        label: "COMPSCI 1027",
-        mostRecentMessage: "you where are we meeting up",
-        timeMessageSent: Date.now() - 3600000,
+        threadName: "another cs chat",
+        mostRecentMessage: "you where are we meeting up, this one is long to test how long text react",
+        timeMessageSent: Date.now() - 31556952000,
         read: false,
-        isDirectMessage: false,
+        courseCode: "CS1027"
     },
     {
-        label: "Lucas Vanderwielen",
-        mostRecentMessage: "yooo whats going on",
-        timeMessageSent: Date.now() - 60000,
-        read: false,
-        isDirectMessage: true,
-    },
-    {
-        label: "Stats 1020",
-        mostRecentMessage: "you where are we meeting up",
-        timeMessageSent: Date.now() - 1000,
+        threadName: "stats chat",
+        mostRecentMessage: "you where are we meeting up, this one is long to test how long text react",
+        timeMessageSent: Date.now() - 31556952000,
         read: true,
-        isDirectMessage: false,
+        courseCode: "STATS2010"
     },
     {
-        label: "COMPSCI 2022",
+        threadName: "cooler stats chat",
+        mostRecentMessage: "you where are we meeting up, this one is long to test how long text react",
+        timeMessageSent: Date.now() - 31556952000,
+        read: false,
+        courseCode: "STATS2010"
+    },
+    {
+        threadName: "cool cs chat",
+        mostRecentMessage: "you where are we meeting up, this one is long to test how long text react",
+        timeMessageSent: Date.now() - 31556952000,
+        read: true,
+        courseCode: "CS1027"
+    },
+    {
+        threadName: "doop phil chat",
+        mostRecentMessage: "you where are we meeting up, this one is long to test how long text react",
+        timeMessageSent: Date.now() - 31556952000,
+        read: true,
+        courseCode: "PHIL1020"
+    },
+    {
+        threadName: "another phil chat",
+        mostRecentMessage: "you where are we meeting up, this one is long to test how long text react",
+        timeMessageSent: Date.now() - 31556952000,
+        read: false,
+        courseCode: "PHIL1020"
+    },
+    {
+        username: "Lucas Vanderwielen",
+        mostRecentMessage: "you where are we meeting up, this one is long to test how long text react",
+        timeMessageSent: Date.now() - 31556952000,
+        read: false
+    },
+    {
+        username: "Julian Laxman",
         mostRecentMessage: "you where are we meeting up",
         timeMessageSent: Date.now(),
         read: true,
-        isDirectMessage: false,
-    },
-    {
-        label: "COMPSCI 1027",
-        mostRecentMessage: "you where are we meeting up",
-        timeMessageSent: Date.now(),
-        read: false,
-        isDirectMessage: false,
-    },
-    {
-        label: "Julian Laxman",
-        mostRecentMessage: "you where are we meeting up",
-        timeMessageSent: Date.now(),
-        read: false,
-        isDirectMessage: true,
     }
 ]
 
