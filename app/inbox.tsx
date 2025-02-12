@@ -199,15 +199,18 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 27,
         fontWeight: 600,
-        padding: 5
+        padding: 5,
+        color: "#3D404A",
     },
     blankSearch: {
         textAlign: "center",
         fontSize: 15,
+        color: "#3D404A",
     },
     blankSearchContainer: {
         flexDirection: "column",
-        padding: "20%"
+        padding: "20%",
+
     }
 })
 
