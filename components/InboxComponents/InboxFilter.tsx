@@ -5,7 +5,9 @@ import Svg, { Path } from "react-native-svg"
 interface InboxFilterProps {
     filterNames: string[],
     searchKey: string,
-    setSearchKey: (newKey: string) => void
+    setSearchKey: (newKey: string) => void,
+    setActiveFilter: (newFilter: string) => void
+
 }
 
 function InboxFilter(props: InboxFilterProps) {
@@ -14,15 +16,14 @@ function InboxFilter(props: InboxFilterProps) {
     const changeSelected = (newSelected: number) => {
         if (selected == newSelected) {
             setSelected(-1)
-            props.setSearchKey("")
+            props.setActiveFilter("")
             return;
         }
-        props.setSearchKey(props.filterNames[newSelected])
+        props.setActiveFilter(props.filterNames[newSelected])
         setSelected(newSelected)
     }
     const changeOfSearchBar = (newText: string) => {
         props.setSearchKey(newText)
-        setSelected(-1)
     }
 
     const getFilters = () => {

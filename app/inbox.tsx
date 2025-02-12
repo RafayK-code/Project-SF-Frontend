@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View, Text } from "react-native";
 
 import InboxHeader from "../components/InboxComponents/InboxHeader";
 import InboxFilter from "../components/InboxComponents/InboxFilter";
@@ -20,6 +20,7 @@ export interface MessageThreadInfo {
 function Inbox() {
     // the search key
     const [searchKey, setSearchKey] = useState("")
+    const [activeFilter, setActiveFilter] = useState("")
 
     //change this to a hook or how ever we get the message data
     const messageData: MessageThreadInfo[] = testData
@@ -51,7 +52,7 @@ function Inbox() {
 
     const getSearchKeyMatchedThreads = (): MessageThreadInfo[] => {
         //this is where the message Data should come from
-        var data: MessageThreadInfo[] = messageData
+        var data: MessageThreadInfo[] = getFilterMatchedThreads()
         var result: MessageThreadInfo[] = []
 
         //if the key is dms then return all the dms
@@ -75,6 +76,32 @@ function Inbox() {
             })
             return result
         }
+    }
+    const getFilterMatchedThreads = (): MessageThreadInfo[] => {
+        const threads: MessageThreadInfo[] = messageData
+        //If no filter return all
+        if (activeFilter == "") {
+            return threads
+        }
+        const result: MessageThreadInfo[] = []
+
+        // if were filtering dms then look to see if username is defined
+        if (activeFilter == "Direct Messages") {
+            threads.forEach((thread: MessageThreadInfo) => {
+                if (thread.username != undefined) {
+                    result.push(thread)
+                }
+            })
+            return result
+        }
+
+        // only returns one with the courseCode == the current filter
+        threads.forEach((thread: MessageThreadInfo) => {
+            if (thread.courseCode == activeFilter) {
+                result.push(thread)
+            }
+        })
+        return result
     }
     const compareToSearchKey = (key: string | undefined): boolean => {
         if (key == undefined) {
@@ -103,6 +130,19 @@ function Inbox() {
         return filters
     }
 
+    const noResultLabel = () => {
+        if (getMessageThreads().length == 0) {
+            return (
+                <>
+                    <View style={styles.blankSearchContainer}>
+                        <Text style={styles.blankSearchTitle}>No Results...</Text>
+                        <Text style={styles.blankSearch}>Try refining your search or joining some more chats.</Text>
+                    </View>
+                </>
+            )
+        }
+    }
+
 
     return (
         <>
@@ -111,7 +151,7 @@ function Inbox() {
                 <InboxHeader></InboxHeader>
 
                 {/* Search section, contains the search bar and preset filters*/}
-                <InboxFilter filterNames={getFilters()} searchKey={searchKey} setSearchKey={setSearchKey}></InboxFilter>
+                <InboxFilter filterNames={getFilters()} searchKey={searchKey} setSearchKey={setSearchKey} setActiveFilter={setActiveFilter}></InboxFilter>
 
                 {/* The main messages threads section*/}
                 <ScrollView style={styles.threadsContainer}>
@@ -139,6 +179,7 @@ function Inbox() {
                             </MessageThread>
                         })
                     }
+                    {noResultLabel()}
                 </ScrollView>
 
             </View>
@@ -153,6 +194,20 @@ const styles = StyleSheet.create({
         backgroundColor: "#F7F3E8",
     },
     threadsContainer: {
+    },
+    blankSearchTitle: {
+        textAlign: "center",
+        fontSize: 27,
+        fontWeight: 600,
+        padding: 5
+    },
+    blankSearch: {
+        textAlign: "center",
+        fontSize: 15,
+    },
+    blankSearchContainer: {
+        flexDirection: "column",
+        padding: "20%"
     }
 })
 
