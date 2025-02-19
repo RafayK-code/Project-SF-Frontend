@@ -1,6 +1,7 @@
 import { Text, View, SafeAreaView } from "react-native";
 import Login from "../screens/Login";
 import Inbox from "./(tabs)/inbox";
+import LandingScreen from "./NewLandingPagee";
 
 export default function Index() {
   return (
@@ -9,7 +10,7 @@ export default function Index() {
         flex: 1,
       }}
     >
-      <Login></Login>
+      <LandingScreen></LandingScreen>
     </View>
   );
 }
