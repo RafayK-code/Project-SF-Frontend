@@ -1,8 +1,8 @@
 import { ScrollView, StyleSheet, View, Text } from "react-native";
 
-import InboxHeader from "../../components/InboxComponents/InboxHeader";
-import InboxFilter from "../../components/InboxComponents/InboxFilter";
-import MessageThread from "../../components/InboxComponents/MessageThread";
+import InboxHeader from "../components/InboxComponents/InboxHeader";
+import InboxFilter from "../components/InboxComponents/InboxFilter";
+import MessageThread from "../components/InboxComponents/MessageThread";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 

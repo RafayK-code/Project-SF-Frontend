@@ -1,7 +1,7 @@
-import { Text, View, SafeAreaView } from "react-native";
-import Login from "../screens/Login";
-import Inbox from "./(tabs)/inbox";
-import LandingScreen from "./NewLandingPagee";
+// App entry here
+
+import { View } from "react-native";
+import LandingScreen from "./landing";
 
 export default function Index() {
   return (

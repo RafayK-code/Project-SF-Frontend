@@ -30,7 +30,7 @@ function LandingScreen({
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.loginButton}
-        onPress={() => router.push("/(tabs)")}
+        onPress={() => router.push("/home")}
       >
         <Text style={styles.loginText}>{loginLabel}</Text>
       </TouchableOpacity>

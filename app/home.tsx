@@ -5,8 +5,11 @@ import { Input } from "@/components/ui/Input";
 import { TouchableOpacity } from "react-native";
 import { View, Text, ScrollView, StyleSheet, SafeAreaView } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { useRouter } from "expo-router";
 
 const HomePage = () => {
+  const router = useRouter();
+
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -33,6 +36,7 @@ const HomePage = () => {
 
   const navigateToProfile = () => {
     console.log("Navigating to Profile Page");
+    router.push("/profile");
   };
 
   const navigateToGroupSelect = (groupName: string): void => {
@@ -45,6 +49,7 @@ const HomePage = () => {
 
   const navigateToInboxScreen = () => {
     console.log("Navigating to Inbox Screen");
+    router.push("/inbox");
   };
 
   return (
