@@ -4,6 +4,7 @@ import InboxHeader from "../../components/InboxComponents/InboxHeader";
 import InboxFilter from "../../components/InboxComponents/InboxFilter";
 import MessageThread from "../../components/InboxComponents/MessageThread";
 import { useState } from "react";
+import { useRouter } from "expo-router";
 
 // if username is defined then courseCode and threadName should be undefined
 // if courseCode or threadName are defined both have to be defined and username needs to be undefined
@@ -17,6 +18,8 @@ export interface MessageThreadInfo {
 }
 
 function Inbox() {
+  const router = useRouter();
+
   // the search key
   const [searchKey, setSearchKey] = useState("");
   const [activeFilter, setActiveFilter] = useState("");
