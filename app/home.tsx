@@ -124,12 +124,11 @@ const HomePage = () => {
 
       <View style={styles.inboxContainer}>
         <View style={styles.inboxHeader}>
-          <Text
-            style={[styles.inboxTitle, { color: "183c30" }]}
-            onPress={navigateToInboxScreen}
-          >
-            Inbox
-          </Text>
+          <TouchableOpacity onPress={navigateToInboxScreen}>
+            <Text style={[styles.inboxTitle, { color: "183c30" }]}>
+              Inbox →
+            </Text>
+          </TouchableOpacity>
         </View>
         <ScrollView>
           {[
