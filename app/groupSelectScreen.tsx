@@ -1,5 +1,5 @@
 import PageBackButton from "@/components/PageBackButton"
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View, Image, useWindowDimensions } from "react-native"
 import GroupSelectMemberList from "../components/GroupSelectComponents/GroupSelectMemberList"
 import { Member } from "../components/GroupSelectComponents/GroupSelectMember"
 import FloatingProfiles from "../components/GroupSelectComponents/FloatingProfiles"
@@ -36,6 +36,8 @@ function GroupSelectScreen() {
     const joinGroup = () => {
         // Called when user tries to join group
     }
+
+    const screenHeight = useWindowDimensions().height
     return (
         <>
             <View style={styles.container}>
@@ -49,6 +51,8 @@ function GroupSelectScreen() {
                 <View style={styles.profile}>
                     <Image></Image>
                 </View>
+
+
                 {/* Member Amounts */}
                 <Text style={styles.groupMemberCount}>{currentGroupChat.membersCount + '/' + currentGroupChat.maxMembers}</Text>
 
