@@ -2,7 +2,6 @@
 
 import { View } from "react-native";
 import LandingScreen from "./landing";
-import GroupSeletScreen from "./groupSelectScreen";
 
 export default function Index() {
   return (
@@ -11,7 +10,7 @@ export default function Index() {
         flex: 1,
       }}
     >
-      <GroupSeletScreen></GroupSeletScreen>
+      <LandingScreen></LandingScreen>
     </View>
   );
 }
