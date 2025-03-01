@@ -55,7 +55,9 @@ const HomePage = () => {
             placeholder="Search for a course"
             value={searchQuery}
             onChangeText={handleSearchChange}
-            style={{ backgroundColor: "#fdfaf1" }}
+            style={{
+              backgroundColor: "#fdfaf1",
+            }}
           />
         </View>
         <TouchableOpacity
@@ -120,21 +122,21 @@ const HomePage = () => {
       <View style={styles.inboxContainer}>
         <View style={styles.inboxHeader}>
           <Text
-            style={[styles.inboxTitle, { color: "183c30" }]}
+            style={[styles.inboxTitle, { color: textColor }]}
             onPress={navigateToInboxScreen}
           >
             Inbox
           </Text>
         </View>
-        <ScrollView>
+        <ScrollView style={styles.inboxMessages}>
           {[
             {
-              name: "Julian Laxman",
+              name: "Thomas llamzan",
               message: "Let's study tomorrow!",
               time: "2:11 PM",
             },
             {
-              name: "Henry Chen",
+              name: "Callum Thompson",
               message: "Sorry, can't make it",
               time: "1:52 PM",
             },
@@ -144,17 +146,17 @@ const HomePage = () => {
               time: "11:55 AM",
             },
             {
-              name: "Lukas Bozinov",
+              name: "Andres Pedreros",
               message: "What did you get for question 4?",
               time: "10:23 AM",
             },
             {
-              name: "Julian Laxman",
+              name: "Kalundi Serumaga",
               message: "Let's study tomorrow!",
               time: "2:11 PM",
             },
             {
-              name: "Henry Chen",
+              name: "Callum Thompson",
               message: "Sorry, can't make it",
               time: "1:52 PM",
             },
@@ -164,7 +166,7 @@ const HomePage = () => {
               time: "11:55 AM",
             },
             {
-              name: "Lukas Bozinov",
+              name: "Kalundi Serumaga",
               message: "What did you get for question 4?",
               time: "10:23 AM",
             },
@@ -190,12 +192,12 @@ const HomePage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
   },
   searchContainer: {
     flexDirection: "row",
     marginBottom: 16,
     alignItems: "center",
+    padding: 8,
   },
   searchInput: {
     flex: 1,
@@ -224,7 +226,7 @@ const styles = StyleSheet.create({
   groupCard: {
     width: 150,
     height: 110,
-    marginRight: 16,
+    marginLeft: 8,
     backgroundColor: "#183c30",
     justifyContent: "flex-end",
     padding: 8,
@@ -249,6 +251,7 @@ const styles = StyleSheet.create({
   inboxTitle: {
     fontSize: 18,
     fontWeight: "bold",
+    paddingLeft: 24,
   },
   inboxCard: {
     marginBottom: 4,
@@ -261,6 +264,9 @@ const styles = StyleSheet.create({
   inboxMessageHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  inboxMessages: {
+    paddingHorizontal: 24,
   },
   messageName: {
     fontWeight: "bold",

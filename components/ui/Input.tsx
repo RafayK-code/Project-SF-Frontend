@@ -1,6 +1,11 @@
 import React from "react";
-import { Text, TouchableOpacity, View, StyleSheet, TextInput } from "react-native";
-
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 
 interface InputProps {
   type?: string;
@@ -10,7 +15,17 @@ interface InputProps {
   className?: string;
 }
 
-export const Input = ({ placeholder = "", value = "", onChangeText, style = {} }: { placeholder?: string, value: string, onChangeText: (text: string) => void, style?: object }) => {
+export const Input = ({
+  placeholder = "",
+  value = "",
+  onChangeText,
+  style = {},
+}: {
+  placeholder?: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  style?: object;
+}) => {
   return (
     <TextInput
       placeholder={placeholder}
@@ -21,13 +36,13 @@ export const Input = ({ placeholder = "", value = "", onChangeText, style = {} }
   );
 };
 
-
 const styles = StyleSheet.create({
-    input: {
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 8,
-        padding: 12,
-        marginVertical: 8,
-      },
-  });
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 12,
+    marginVertical: 8,
+    fontSize: 18,
+  },
+});
