@@ -3,6 +3,8 @@
 import { View } from "react-native";
 import LandingScreen from "./landing";
 import GroupSeletScreen from "./groupSelectScreen";
+import GroupCreateScreen from "./groupCreateScreen";
+import ProfileScreen from "./profile";
 
 export default function Index() {
   return (
@@ -11,7 +13,7 @@ export default function Index() {
         flex: 1,
       }}
     >
-      <GroupSeletScreen></GroupSeletScreen>
+      <GroupCreateScreen></GroupCreateScreen>
     </View>
   );
 }
