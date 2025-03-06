@@ -5,7 +5,8 @@ import {
 } from "react-native";
 
 interface PageBackButtonProps {
-    onClick: () => void
+    onClick: () => void,
+    size?: number
 }
 function PageBackButton(props: PageBackButtonProps) {
     return (
@@ -14,7 +15,7 @@ function PageBackButton(props: PageBackButtonProps) {
                 style={styles.backButton}
                 onPress={props.onClick}
             >
-                <Text style={styles.backButtonText}>←</Text>
+                <Text style={[styles.backButtonText, props.size ? { fontSize: props.size } : undefined]}>←</Text>
             </TouchableOpacity>
         </>
     )
