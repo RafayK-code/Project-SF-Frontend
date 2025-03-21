@@ -8,8 +8,10 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 const GroupList = () => {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
@@ -71,7 +73,11 @@ const GroupList = () => {
       {/* Group List */}
       <ScrollView>
         {groups.map((group, index) => (
-          <TouchableOpacity key={index} style={styles.groupCard}>
+          <TouchableOpacity
+            key={index}
+            style={styles.groupCard}
+            onPress={() => router.push("/groupSelectScreen")}
+          >
             <Text style={styles.groupName}>{group.name}</Text>
             <Text style={styles.groupMembers}>{group.members}</Text>
           </TouchableOpacity>
@@ -79,7 +85,10 @@ const GroupList = () => {
       </ScrollView>
 
       {/* Floating Action Button */}
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => router.push("/groupCreateScreen")}
+      >
         <Ionicons name="add" size={28} color="black" />
       </TouchableOpacity>
     </View>

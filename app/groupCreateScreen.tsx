@@ -21,7 +21,9 @@ function GroupCreateScreen() {
   const [publicGroup, setPublicGroup] = useState(false);
 
   const onGroupCreate = () => {};
-  const onBack = () => {};
+  const onBack = () => {
+    router.back();
+  };
   const onGroupNameChange = (text: string) => {
     setGroupName(text);
   };
