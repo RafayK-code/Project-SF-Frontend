@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import {
   View,
-  Text,
   StyleSheet,
-  TextInput,
   ScrollView,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { UnknownOutputParams, useLocalSearchParams, useRouter } from "expo-router";
 import MessageScreenHeader from "../components/MessagePageComponents/MessagingScreenHeader";
 import MessageSection from "../components/MessagePageComponents/MessageSection";
 import MessagingBar from "../components/MessagePageComponents/MessagingBar";
+import { UseMessages } from "@/hooks/UseMessages";
+import { useChat } from "@/hooks/UseChat";
+
 
 
 export default function MessagingScreen() {
@@ -21,10 +21,6 @@ export default function MessagingScreen() {
 
   const [message, setMessage] = useState("")
 
-  // Where the messages come from
-  const messages = () => {
-    return testMessages
-  }
 
   // Called when attempting to send message
   const sendMessage = () => {
@@ -37,6 +33,9 @@ export default function MessagingScreen() {
   }
 
 
+  const messages = UseMessages(2)
+  const chat = useChat(2)
+
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
@@ -45,14 +44,14 @@ export default function MessagingScreen() {
           behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
           {/* Header */}
-          <MessageScreenHeader groupName={"CS1027"} goBack={goBack}></MessageScreenHeader>
+          <MessageScreenHeader groupName={chat.name} goBack={goBack}></MessageScreenHeader>
 
 
           {/* Messages List */}
           <ScrollView style={styles.messagesContainer}>
             {
-              messages().map((message: Message, index: number) => {
-                return <MessageSection content={message.messageContent} timeSent={message.timeSent} username={message.user} key={index}></MessageSection>
+              messages.map((message, index: number) => {
+                return <MessageSection content={message.content} timeSent={message.create_ts} username={message.user.name} key={index}></MessageSection>
               })
             }
           </ScrollView>
@@ -84,54 +83,3 @@ const styles = StyleSheet.create({
   },
 
 });
-
-
-//some test messages
-export interface Message {
-  messageID: string,
-  timeSent: number,
-  messageContent: string,
-  user: string
-}
-
-
-
-const testMessages: Message[] = [
-  {
-    messageID: "messageId1",
-    timeSent: 0,
-    messageContent: "Yo this is wicked, hope it looks good",
-    user: "Lucas Vanderwielen"
-  },
-  {
-    messageID: "messageId2",
-    timeSent: 0,
-    messageContent: "sick bro keep it up, this is super long text to see how it reacts to longer text, some people really like to yap, so yeah cool eh",
-    user: "John Hopkins"
-  },
-  {
-    messageID: "messageId3",
-    timeSent: 0,
-    messageContent: "yeah man looking great",
-    user: "Julian Laxman"
-  },
-  {
-    messageID: "messageId4",
-    timeSent: 0,
-    messageContent: "Yo this is wicked, hope it looks good",
-    user: "Lucas Vanderwielen"
-  },
-  {
-    messageID: "messageId5",
-    timeSent: 0,
-    messageContent: "sick bro keep it up, this is super long text to see how it reacts to longer text, some people really like to yap, so yeah cool eh, still yapping, but like this is a cool idea and im super hyped but i need to find some way to denote if it is you message and not someone elses yk, so yeah that something that i ned to woek on",
-    user: "John Hopkins"
-  },
-  {
-    messageID: "messageId6",
-    timeSent: 0,
-    messageContent: "yeah man looking great",
-    user: "Julian Laxman"
-  }
-
-]

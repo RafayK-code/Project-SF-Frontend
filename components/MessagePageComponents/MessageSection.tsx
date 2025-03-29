@@ -6,7 +6,7 @@ import {
 
 interface MessageSectionProps {
     content: string,
-    timeSent: number,
+    timeSent: string,
     username: string
 }
 

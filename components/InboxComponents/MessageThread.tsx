@@ -37,7 +37,7 @@ function MessageThread(props: MessageThreadProps) {
 
     for (let i = 0; i < timeScales.length; i++) {
       let num: number = Math.floor(difference / timeScales[i]);
-      if (num > 1) {
+      if (num >= 1) {
         return String(num) + symbol[i];
       }
     }
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     flex: 0.1,
   },
   read: {
-    opacity: 0.3,
+    opacity: 0.6,
   },
 });
 

@@ -6,6 +6,7 @@ import { TouchableOpacity } from "react-native";
 import { View, Text, ScrollView, StyleSheet, SafeAreaView } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useRouter } from "expo-router";
+import { useInbox } from "@/hooks/useInbox";
 
 const HomePage = () => {
   const router = useRouter();
@@ -43,14 +44,23 @@ const HomePage = () => {
     console.log(`Navigating to Group Select Screen for ${groupName}`);
   };
 
-  const navigateToMessagingScreen = (message: string): void => {
-    console.log(`Navigating to Messaging Screen for ${message}`);
+  const navigateToMessagingScreen = (messageId: number): void => {
+    console.log(`Navigating to Messaging Screen for ${messageId}`);
+    router.push("/messaging")
   };
+
 
   const navigateToInboxScreen = () => {
     console.log("Navigating to Inbox Screen");
     router.push("/inbox");
   };
+
+  const formatDate = (iso: string): string => {
+    const date = new Date(iso)
+    return date.toLocaleString()
+  }
+
+  const inbox = useInbox(1)
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor }]}>
@@ -88,7 +98,7 @@ const HomePage = () => {
       <Text style={[styles.inboxTitle, { color: textColor }]}>
         Suggested for you
       </Text>
-      <ScrollView style={styles.suggestionsContainer} horizontal>
+      <ScrollView style={styles.suggestionsContainer} horizontal={true} showsHorizontalScrollIndicator={false}>
         {[
           {
             name: "CS2211 study group",
@@ -131,58 +141,17 @@ const HomePage = () => {
           </TouchableOpacity>
         </View>
         <ScrollView>
-          {[
-            {
-              name: "Julian Laxman",
-              message: "Let's study tomorrow!",
-              time: "2:11 PM",
-            },
-            {
-              name: "Henry Chen",
-              message: "Sorry, can't make it",
-              time: "1:52 PM",
-            },
-            {
-              name: "CS2212 Project Team",
-              message: "I need help figuring this out...",
-              time: "11:55 AM",
-            },
-            {
-              name: "Lukas Bozinov",
-              message: "What did you get for question 4?",
-              time: "10:23 AM",
-            },
-            {
-              name: "Julian Laxman",
-              message: "Let's study tomorrow!",
-              time: "2:11 PM",
-            },
-            {
-              name: "Henry Chen",
-              message: "Sorry, can't make it",
-              time: "1:52 PM",
-            },
-            {
-              name: "CS2212 Project Team",
-              message: "I need help figuring this out...",
-              time: "11:55 AM",
-            },
-            {
-              name: "Lukas Bozinov",
-              message: "What did you get for question 4?",
-              time: "10:23 AM",
-            },
-          ].map((message, index) => (
+          {inbox.chats.map((message, index: number) => (
             <Card
               key={index}
               style={styles.inboxCard}
-              onPress={() => navigateToMessagingScreen(message.name)}
+              onPress={() => navigateToMessagingScreen(message.id)}
             >
               <View style={styles.inboxMessageHeader}>
                 <Text style={[styles.messageName]}>{message.name}</Text>
-                <Text style={styles.messageTime}>{message.time}</Text>
+                <Text style={styles.messageTime}>{formatDate(message.create_ts)}</Text>
               </View>
-              <Text style={styles.messageContent}>{message.message}</Text>
+              <Text style={styles.messageContent}>{message.latest_message.content}</Text>
             </Card>
           ))}
         </ScrollView>
@@ -194,12 +163,13 @@ const HomePage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+
   },
   searchContainer: {
     flexDirection: "row",
     marginBottom: 16,
     alignItems: "center",
+    paddingHorizontal: 15
   },
   searchInput: {
     flex: 1,
@@ -224,14 +194,13 @@ const styles = StyleSheet.create({
   suggestionsContainer: {
     flexDirection: "row",
     maxHeight: 130,
+    paddingHorizontal: 16
   },
   groupCard: {
-    width: 150,
-    height: 110,
     marginRight: 16,
     backgroundColor: "#183c30",
     justifyContent: "flex-end",
-    padding: 8,
+    padding: 8
   },
   cardText: {
     color: "#fff",
@@ -243,6 +212,7 @@ const styles = StyleSheet.create({
   },
   inboxContainer: {
     flex: 1,
+    paddingHorizontal: 8
   },
   inboxHeader: {
     flexDirection: "row",
@@ -253,6 +223,7 @@ const styles = StyleSheet.create({
   inboxTitle: {
     fontSize: 18,
     fontWeight: "bold",
+    paddingHorizontal: 16
   },
   inboxCard: {
     marginBottom: 4,
@@ -260,7 +231,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fdfaf1",
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 8,
+    borderRadius: 8
   },
   inboxMessageHeader: {
     flexDirection: "row",
