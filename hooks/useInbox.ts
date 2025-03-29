@@ -40,6 +40,8 @@ interface Inbox {
     hasHydrated: boolean
 }
 // Gets the inbox for a user
+//
+// Returns a list of chats which the user is a part of
 export function useInbox(userId: number): Inbox {
     const [inbox, setInbox] = useState<Chat[]>([])
     const [hasHydrated, setHasHydrated] = useState(false)

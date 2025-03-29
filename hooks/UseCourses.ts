@@ -10,9 +10,13 @@ interface CoursesReturn {
     courses: Course[]
 }
 
+// Gets all the courses
+//
+// Returns a list of courses
 export function useCourses(): CoursesReturn {
     const [courses, setCourses] = useState<Course[]>([]);
     const [hydrated, setHydrated] = useState(false);
+
 
     useEffect(() => {
         fetch(url + "/read/courses")

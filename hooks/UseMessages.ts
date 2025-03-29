@@ -14,6 +14,8 @@ interface Message {
 }
 
 // Gets all the messages for a chat
+//
+// returns all the messages that are in that chat
 export function UseMessages(chatId: number) {
     const [messages, setMessages] = useState<Message[]>([])
     useEffect(() => {
