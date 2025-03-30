@@ -1,20 +1,24 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 interface MessageThreadProps {
   label: string;
   mostRecentMessageContent: string;
   timeMessageSent: number;
   read: boolean;
+  chatId: number;
 }
 
 function MessageThread(props: MessageThreadProps) {
   const router = useRouter();
 
+  const { userId } = useLocalSearchParams<{ userId: string }>();
+
+
   //called when the thread is clicked
   const onClick = () => {
-    router.push("/messaging");
+    router.push(`/messaging?messageId=${props.chatId}&userId=${userId}`);
   };
   const shortenedText = (): string => {
     let maxLength = 33;
@@ -74,7 +78,7 @@ function MessageThread(props: MessageThreadProps) {
         </View>
         {/* Chevron*/}
         <View style={styles.extraInfoContainer}>
-          <Chevron></Chevron>
+          <Chevron size={20}></Chevron>
         </View>
       </TouchableOpacity>
     </>
@@ -124,20 +128,20 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   chevron: {
-    width: 30,
     height: 30,
+    width: 30,
     paddingHorizontal: 10,
     flex: 0.1,
   },
   read: {
-    opacity: 0.6,
+    opacity: 0.9,
   },
 });
 
-const Chevron = () => {
+export const Chevron = (props: { size: number }) => {
   return (
-    <View style={styles.chevron}>
-      <Svg width="100%" height="100%" viewBox="0 0 10 18" fill="none">
+    <View style={[styles.chevron, { width: props.size, height: props.size }]}>
+      <Svg width={props.size} height={props.size} viewBox="0 0 10 18" fill="none">
         <Path
           fill-rule="evenodd"
           clip-rule="evenodd"

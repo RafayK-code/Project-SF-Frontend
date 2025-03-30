@@ -67,11 +67,11 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   selected: {
-    backgroundColor: "#42CAFD",
+    backgroundColor: "#F4D84C",
     color: "#3D404A",
   },
   selectedUpper: {
-    backgroundColor: "#92E1FF",
+    backgroundColor: "#FDEC96",
     color: "#3D404A",
   },
   imageCont: {

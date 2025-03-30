@@ -39,14 +39,20 @@ interface Inbox {
     chats: Chat[],
     hasHydrated: boolean
 }
-// Gets the inbox for a user
-//
-// Returns a list of chats which the user is a part of
+
+/** 
+    Returns the inbox, this inbox contains a list of chats which the user is a part of
+
+    @param userId - the ID of the user which to fetch the inbox
+
+    @returns a list of chats along with hydrated which becomes true when the data has finished being fetched
+*/
 export function useInbox(userId: number): Inbox {
     const [inbox, setInbox] = useState<Chat[]>([])
     const [hasHydrated, setHasHydrated] = useState(false)
 
     useEffect(() => {
+
         fetch(url + "/read/user/" + userId + "/chats")
             .then((value) => value.json())
             .then((res: Chat[]) => {

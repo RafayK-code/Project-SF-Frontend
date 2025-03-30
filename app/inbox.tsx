@@ -4,8 +4,9 @@ import InboxHeader from "../components/InboxComponents/InboxHeader";
 import InboxFilter from "../components/InboxComponents/InboxFilter";
 import MessageThread from "../components/InboxComponents/MessageThread";
 import { useState } from "react";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Chat, useInbox } from "@/hooks/useInbox";
+import NoResultLabel from "@/components/NoResultView";
 
 // if username is defined then courseCode and threadName should be undefined
 // if courseCode or threadName are defined both have to be defined and username needs to be undefined
@@ -13,8 +14,9 @@ import { Chat, useInbox } from "@/hooks/useInbox";
 
 function Inbox() {
   const router = useRouter();
+  const { userId } = useLocalSearchParams<{ userId: string }>();
 
-  const inbox = useInbox(1)
+  const inbox = useInbox(Number(userId))
 
 
   // the search key
@@ -22,7 +24,6 @@ function Inbox() {
   const [activeFilter, setActiveFilter] = useState("");
 
 
-  //change this to a hook or how ever we get the message data
 
 
   //this functions sorts the message threads
@@ -41,13 +42,19 @@ function Inbox() {
     //sorts by how recent the message is
     readThreads = readThreads.sort(
       (a: Chat, b: Chat) => {
-        return new Date(a.latest_message.create_ts).getTime() - new Date(b.latest_message.create_ts).getTime();
+        if (a.latest_message && b.latest_message) {
+          return new Date(a.latest_message.create_ts).getTime() - new Date(b.latest_message.create_ts).getTime();
+        }
+        return 0;
       }
     );
 
     unreadThreads = unreadThreads.sort(
       (a: Chat, b: Chat) => {
-        return new Date(a.latest_message.create_ts).getTime() - new Date(b.latest_message.create_ts).getTime();
+        if (a.latest_message && b.latest_message) {
+          return new Date(a.latest_message.create_ts).getTime() - new Date(b.latest_message.create_ts).getTime();
+        }
+        return 0;
       }
     );
 
@@ -137,21 +144,6 @@ function Inbox() {
     return filters;
   };
 
-  const noResultLabel = () => {
-    if (getMessageThreads().length == 0) {
-      return (
-        <>
-          <View style={styles.blankSearchContainer}>
-            <Text style={styles.blankSearchTitle}>No Results...</Text>
-            <Text style={styles.blankSearch}>
-              Try refining your search or joining some more chats.
-            </Text>
-          </View>
-        </>
-      );
-    }
-  };
-
   return (
     <>
       <View style={styles.container}>
@@ -180,15 +172,16 @@ function Inbox() {
               return (
                 <MessageThread
                   label={threadLabel}
-                  mostRecentMessageContent={thread.latest_message.content}
-                  timeMessageSent={new Date(thread.latest_message.create_ts).getTime()}
+                  mostRecentMessageContent={thread.latest_message ? thread.latest_message.content : ""}
+                  timeMessageSent={thread.latest_message ? new Date(thread.latest_message.create_ts).getTime() : new Date(thread.create_ts).getTime()}
                   read={true}
                   key={index}
+                  chatId={thread.id}
                 ></MessageThread>
               );
             }
           )}
-          {noResultLabel()}
+          {getMessageThreads().length == 0 ? <NoResultLabel></NoResultLabel> : undefined}
         </ScrollView>
       </View>
     </>
@@ -202,22 +195,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F3E8",
   },
   threadsContainer: {},
-  blankSearchTitle: {
-    textAlign: "center",
-    fontSize: 27,
-    fontWeight: 600,
-    padding: 5,
-    color: "#3D404A",
-  },
-  blankSearch: {
-    textAlign: "center",
-    fontSize: 15,
-    color: "#3D404A",
-  },
-  blankSearchContainer: {
-    flexDirection: "column",
-    padding: "20%",
-  },
+
 });
 
 // const testfilters = [

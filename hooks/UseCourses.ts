@@ -10,9 +10,12 @@ interface CoursesReturn {
     courses: Course[]
 }
 
-// Gets all the courses
-//
-// Returns a list of courses
+/** 
+    Returns all a list of all courses
+
+
+    @returns all the courses along with hydrated which becomes true when the data has finished being fetched
+*/
 export function useCourses(): CoursesReturn {
     const [courses, setCourses] = useState<Course[]>([]);
     const [hydrated, setHydrated] = useState(false);

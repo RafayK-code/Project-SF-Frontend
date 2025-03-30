@@ -15,7 +15,13 @@ interface CourseReturn {
     hydrated: boolean,
     courses: Courses[]
 }
-// Gets all of the courses that a user is enrolled in
+/** 
+    Returns all the courses that a user is enrolled in
+
+    @param userId - the ID of the user that the courses will come from
+
+    @returns a list of courses along with hydrated which becomes true when the data has finished being fetched
+*/
 export function useMyCourses(userId: number): CourseReturn {
     const [courses, setCourses] = useState<Courses[]>([]);
     const [hydrated, setHydrated] = useState(false)

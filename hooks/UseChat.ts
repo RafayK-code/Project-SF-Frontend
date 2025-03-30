@@ -26,20 +26,32 @@ enum ChatType {
     GROUP = "GROUP",
     DIRECT = "DIRECT"
 }
+interface ChatReturn {
+    chat: Chat,
+    hydrated: boolean
+}
 
-// Gets all the chat info for a chat with the specified id
-export function useChat(chatId: number) {
+/** 
+    Returns all the data for a chat
+
+    @param chatId - the ID of the chat that the data will come from
+
+    @returns the chat along with hydrated which becomes true when the data has finished being fetched
+*/
+export function useChat(chatId: number): ChatReturn {
     const [chat, setChat] = useState<Chat>(defaultChat)
+    const [hydrated, setHydrated] = useState(false)
 
     useEffect(() => {
         fetch(url + "/read/chat/" + chatId)
             .then(res => res.json())
             .then((res: Chat) => {
                 setChat(res)
+                setHydrated(true)
             })
     })
 
-    return chat
+    return { chat: chat, hydrated: hydrated }
 }
 
 // Default data, should never be shown

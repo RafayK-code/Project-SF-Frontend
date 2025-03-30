@@ -9,8 +9,9 @@ import {
 } from "react-native";
 import GroupSelectMemberList from "../components/GroupSelectComponents/GroupSelectMemberList";
 import { Member } from "../components/GroupSelectComponents/GroupSelectMember";
-import FloatingProfiles from "../components/GroupSelectComponents/FloatingProfiles";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useChat } from "@/hooks/UseChat";
+import { url } from "@/hooks/TestData";
 
 interface GroupChat {
   name: String;
@@ -24,19 +25,12 @@ interface GroupChat {
 
 function GroupSelectScreen() {
   const router = useRouter();
-  const currentGroupChat: GroupChat = {
-    name: "Cool Kids Group Chat",
-    description:
-      "Description for cool kids group chat, omg such a long text this is needs to fit",
-    maxMembers: 50,
-    membersCount: 12,
-    requestToJoin: false,
-    dateOfCreation: 0,
-    members: testmembers,
-  };
+  const { userId, chatId } = useLocalSearchParams<{ userId: string, chatId: string }>();
+
+  const chat = useChat(Number(chatId))
 
   const getDateOfCreation = () => {
-    const date = new Date(currentGroupChat.dateOfCreation);
+    const date = new Date(chat.chat.create_ts);
 
     return date.toDateString();
   };
@@ -44,10 +38,22 @@ function GroupSelectScreen() {
     router.back();
   };
   const joinGroup = () => {
+    const body = {
+      user_id: Number(userId),
+      chat_id: Number(chatId)
+    }
+    console.log(String(body))
     // Called when user tries to join group
+    fetch(url + "/create/chat-membership", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json; charset=UTF-8' }
+    })
+      .then(res => console.log(res.status))
+
+    router.back();
   };
 
-  const screenHeight = useWindowDimensions().height;
   return (
     <>
       <View style={styles.container}>
@@ -63,11 +69,11 @@ function GroupSelectScreen() {
 
         {/* Member Amounts */}
         <Text style={styles.groupMemberCount}>
-          {currentGroupChat.membersCount + "/" + currentGroupChat.maxMembers}
+          {chat.chat.member_count + "/" + chat.chat.member_limit}
         </Text>
 
         {/* Group Chat Name */}
-        <Text style={styles.groupName}>{currentGroupChat.name}</Text>
+        <Text style={styles.groupName}>{chat.chat.name}</Text>
 
         {/* Date Of Creation */}
         <Text style={styles.dateOfCreation}>
@@ -75,23 +81,28 @@ function GroupSelectScreen() {
         </Text>
 
         {/* Description */}
-        <Text style={styles.description}>{currentGroupChat.description}</Text>
+        <Text style={styles.description}>Chats dont have a description</Text>
 
         {/* Member List */}
         <Text style={styles.memberListTitle}>Member List</Text>
         <GroupSelectMemberList
-          members={currentGroupChat.members}
+          members={chat.chat.members.map(member => {
+            return {
+              name: member.name,
+              online: true
+            }
+          })}
         ></GroupSelectMemberList>
 
         {/* Join Button */}
         <TouchableOpacity onPress={joinGroup}>
           <Text style={styles.joinButton}>
-            {currentGroupChat.requestToJoin ? "Request To Join" : "Join Now"}
+            {!chat.chat.is_public ? "Request To Join" : "Join Now"}
           </Text>
         </TouchableOpacity>
 
-        {/* Floating Profiles */}
-        <FloatingProfiles></FloatingProfiles>
+        {/* Floating Profiles
+        <FloatingProfiles></FloatingProfiles> */}
       </View>
     </>
   );

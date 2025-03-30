@@ -7,7 +7,7 @@ import {
   Platform,
   SafeAreaView,
 } from "react-native";
-import { UnknownOutputParams, useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import MessageScreenHeader from "../components/MessagePageComponents/MessagingScreenHeader";
 import MessageSection from "../components/MessagePageComponents/MessageSection";
 import MessagingBar from "../components/MessagePageComponents/MessagingBar";
@@ -15,10 +15,9 @@ import { UseMessages } from "@/hooks/UseMessages";
 import { useChat } from "@/hooks/UseChat";
 
 
-
 export default function MessagingScreen() {
   const router = useRouter();
-
+  const { messageId, userId } = useLocalSearchParams<{ messageId: string, userId: string }>();
   const [message, setMessage] = useState("")
 
 
@@ -33,8 +32,8 @@ export default function MessagingScreen() {
   }
 
 
-  const messages = UseMessages(2)
-  const chat = useChat(2)
+  const messages = UseMessages(Number(messageId))
+  const chat = useChat(Number(messageId))
 
   return (
     <View style={{ flex: 1 }}>
@@ -44,7 +43,7 @@ export default function MessagingScreen() {
           behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
           {/* Header */}
-          <MessageScreenHeader groupName={chat.name} goBack={goBack}></MessageScreenHeader>
+          <MessageScreenHeader groupName={chat.chat.name} goBack={goBack}></MessageScreenHeader>
 
 
           {/* Messages List */}
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F3E8",
   },
   bottom: {
-    flex: 0.04,
+    flex: 0.06,
     backgroundColor: "#FDFBF1",
   },
 

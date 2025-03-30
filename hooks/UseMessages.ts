@@ -13,13 +13,17 @@ interface Message {
     }
 }
 
-// Gets all the messages for a chat
-//
-// returns all the messages that are in that chat
+/** 
+    Returns all the messages for a chat=
+
+    @param chatId - the ID of the chat that the messages will come from
+
+    @returns a list of messages
+*/
 export function UseMessages(chatId: number) {
     const [messages, setMessages] = useState<Message[]>([])
     useEffect(() => {
-        fetch(url + "/read/chat/" + 2 + "/messages")
+        fetch(url + "/read/chat/" + chatId + "/messages")
             .then(res => res.json())
             .then((res) => {
                 setMessages(res.messages)

@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const SearchIcon = () => {
+export const SearchIcon = () => {
     return (
         <View style={styles.searchIcon}>
             <Svg viewBox="0 0 50 50" width="100%" height="100%">

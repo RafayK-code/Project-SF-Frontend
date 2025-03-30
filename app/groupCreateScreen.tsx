@@ -10,17 +10,37 @@ import {
 import GroupCreateButton from "../components/GroupCreateScreenComponents/groupCreateButton";
 import GroupPublicityButton from "../components/GroupCreateScreenComponents/groupPublicityButton";
 import GroupCreateSlider from "../components/GroupCreateScreenComponents/groupCreateSlider";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { url } from "@/hooks/TestData";
 
 function GroupCreateScreen() {
   const [groupName, setGroupName] = useState("");
   const [groupDesc, setGroupDesc] = useState("");
 
+  const { userId, courseId } = useLocalSearchParams<{ userId: string, courseId: string }>();
+
   const [groupMax, setGroupMax] = useState(25);
 
   const [publicGroup, setPublicGroup] = useState(false);
 
-  const onGroupCreate = () => {};
+  const onGroupCreate = () => {
+    const body = {
+      name: groupName,
+      is_public: publicGroup,
+      type: "GROUP",
+      creator_id: Number(userId),
+      course_id: Number(courseId),
+      member_limit: groupMax
+    }
+    fetch(url + "/create/chat", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json; charset=UTF-8' }
+    })
+      .then(res => console.log(res.status))
+
+    router.back();
+  };
   const onBack = () => {
     router.back();
   };
@@ -44,12 +64,14 @@ function GroupCreateScreen() {
   return (
     <>
       <SafeAreaView style={styles.container}>
+        {/* Profile Of Chat */}
         <TouchableWithoutFeedback onPress={onProfileTap}>
           <View style={styles.profile}></View>
         </TouchableWithoutFeedback>
 
         <Text style={styles.title}>What should we call this group?</Text>
 
+        {/* Name Input for chat */}
         <TextInput
           style={styles.input}
           value={groupName}
@@ -60,6 +82,7 @@ function GroupCreateScreen() {
 
         <Text style={styles.title}>Set the vibe! What's this group for?</Text>
 
+        {/* Description Input for chat */}
         <TextInput
           multiline={true}
           style={[
@@ -74,6 +97,7 @@ function GroupCreateScreen() {
 
         <Text style={styles.title}>Let's put a cap on this party!</Text>
 
+        {/* Max Members slider */}
         <GroupCreateSlider
           minValue={10}
           maxValue={50}
@@ -101,11 +125,14 @@ function GroupCreateScreen() {
           ></GroupPublicityButton>
         </View>
 
+        {/* Create Group Button */}
         <GroupCreateButton
           text={"Create Group"}
           onClick={onGroupCreate}
         ></GroupCreateButton>
 
+
+        {/* Go back button */}
         <GroupCreateButton
           text="Go Back"
           onClick={onBack}
