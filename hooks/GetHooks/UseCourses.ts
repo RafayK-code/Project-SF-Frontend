@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { url } from "./TestData";
+import { url } from "../TestData";
 
 interface Course {
     name: string,

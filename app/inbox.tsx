@@ -5,8 +5,9 @@ import InboxFilter from "../components/InboxComponents/InboxFilter";
 import MessageThread from "../components/InboxComponents/MessageThread";
 import { useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Chat, useInbox } from "@/hooks/useInbox";
+import { Chat, useInbox } from "@/hooks/GetHooks/useInbox";
 import NoResultLabel from "@/components/NoResultView";
+import { useInboxContext } from "@/hooks/Contexts/InboxContext";
 
 // if username is defined then courseCode and threadName should be undefined
 // if courseCode or threadName are defined both have to be defined and username needs to be undefined
@@ -16,7 +17,7 @@ function Inbox() {
   const router = useRouter();
   const { userId } = useLocalSearchParams<{ userId: string }>();
 
-  const inbox = useInbox(Number(userId))
+  const inbox = useInboxContext()
 
 
   // the search key

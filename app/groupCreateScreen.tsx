@@ -12,6 +12,7 @@ import GroupPublicityButton from "../components/GroupCreateScreenComponents/grou
 import GroupCreateSlider from "../components/GroupCreateScreenComponents/groupCreateSlider";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { url } from "@/hooks/TestData";
+import { useInboxDispatchContext } from "@/hooks/Contexts/InboxContext";
 
 function GroupCreateScreen() {
   const [groupName, setGroupName] = useState("");
@@ -22,6 +23,8 @@ function GroupCreateScreen() {
   const [groupMax, setGroupMax] = useState(25);
 
   const [publicGroup, setPublicGroup] = useState(false);
+
+  const inboxDispatchContext = useInboxDispatchContext()
 
   const onGroupCreate = () => {
     const body = {
@@ -37,7 +40,13 @@ function GroupCreateScreen() {
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json; charset=UTF-8' }
     })
-      .then(res => console.log(res.status))
+      .then(res => {
+        console.log(res.status)
+
+        inboxDispatchContext({
+          type: "RELOAD"
+        })
+      })
 
     router.back();
   };

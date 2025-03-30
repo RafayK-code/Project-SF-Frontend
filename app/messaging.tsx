@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -6,23 +6,45 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  ScrollViewProps,
+  Keyboard,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import MessageScreenHeader from "../components/MessagePageComponents/MessagingScreenHeader";
 import MessageSection from "../components/MessagePageComponents/MessageSection";
 import MessagingBar from "../components/MessagePageComponents/MessagingBar";
-import { UseMessages } from "@/hooks/UseMessages";
-import { useChat } from "@/hooks/UseChat";
+import { UseMessages } from "@/hooks/GetHooks/UseMessages";
+import { useInboxContext, useInboxDispatchContext } from "@/hooks/Contexts/InboxContext";
+import { url } from "@/hooks/TestData";
+import { useMessageContext, useMessageDispatchContext } from "@/hooks/Contexts/MessagesContext";
+import { useKeyboardDidShow } from "@/hooks/useKeyboardShown";
 
 
 export default function MessagingScreen() {
   const router = useRouter();
-  const { messageId, userId } = useLocalSearchParams<{ messageId: string, userId: string }>();
+  const { chatId, userId } = useLocalSearchParams<{ chatId: string, userId: string }>();
   const [message, setMessage] = useState("")
-
+  const inboxDispatchContext = useInboxDispatchContext();
 
   // Called when attempting to send message
   const sendMessage = () => {
+    const body = {
+      content: message,
+      user_id: userId,
+      chat_id: chatId
+    }
+    fetch(url + "/create/message", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json; charset=UTF-8' }
+    })
+      .then(res => {
+        console.log("Message Send Status: " + res.status + " on ChatId: " + chatId)
+
+        inboxDispatchContext({ type: "RELOAD" })
+        messagesDispatch({ type: "RELOAD", chatId: Number(chatId) })
+      })
+    setMessage("")
 
   }
 
@@ -32,8 +54,25 @@ export default function MessagingScreen() {
   }
 
 
-  const messages = UseMessages(Number(messageId))
-  const chat = useChat(Number(messageId))
+  const chatMessages = useMessageContext().messages.filter((mesg) => {
+    return mesg.chatId == Number(chatId)
+  })[0]
+
+  const messagesDispatch = useMessageDispatchContext()
+  const chat = useInboxContext().chats.filter((chat) => {
+    return chat.id == Number(chatId)
+  })[0]
+
+  const messagesScrollRef = useRef<ScrollView>(null);
+  const keyboardUp = useKeyboardDidShow()
+
+  useEffect(() => {
+    console.log("called")
+    messagesScrollRef.current?.scrollToEnd({ animated: true })
+  }, [keyboardUp, messagesScrollRef])
+
+
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -43,15 +82,18 @@ export default function MessagingScreen() {
           behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
           {/* Header */}
-          <MessageScreenHeader groupName={chat.chat.name} goBack={goBack}></MessageScreenHeader>
+          <MessageScreenHeader groupName={chat.name} goBack={goBack}></MessageScreenHeader>
 
 
           {/* Messages List */}
-          <ScrollView style={styles.messagesContainer}>
+          <ScrollView style={styles.messagesContainer} showsVerticalScrollIndicator={false} ref={messagesScrollRef} onContentSizeChange={() => messagesScrollRef.current?.scrollToEnd({ animated: true })}>
             {
-              messages.map((message, index: number) => {
-                return <MessageSection content={message.content} timeSent={message.create_ts} username={message.user.name} key={index}></MessageSection>
-              })
+              chatMessages ?
+                chatMessages.chats.messages.map((message, index: number) => {
+                  return <MessageSection content={message.content} timeSent={message.create_ts} username={message.user.name} key={index}></MessageSection>
+                })
+                :
+                undefined
             }
           </ScrollView>
 

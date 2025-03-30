@@ -12,8 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import EllipseButton from "@/components/MessagePageComponents/EllipseButton";
 import PageBackButton from "@/components/PageBackButton";
-import { useCourseChats } from "@/hooks/UseCourseChats";
 import NoResultLabel from "@/components/NoResultView";
+import { useCourseChats } from "@/hooks/GetHooks/UseCourseChats";
 
 const GroupList = () => {
   const router = useRouter();

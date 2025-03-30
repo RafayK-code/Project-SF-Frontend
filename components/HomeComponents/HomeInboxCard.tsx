@@ -15,7 +15,7 @@ function HomeInboxCard(props: HomeInboxCardProps) {
 
     const navigateToMessagingScreen = (): void => {
         console.log(`Navigating to Messaging Screen for ${props.chatId}`);
-        router.push(`/messaging?messageId=${props.chatId}&userId=${id}`)
+        router.push(`/messaging?chatId=${props.chatId}&userId=${id}`)
     };
 
     const formatDate = (iso: string): string => {
@@ -24,7 +24,7 @@ function HomeInboxCard(props: HomeInboxCardProps) {
         const date = new Date(iso)
         const AMPM = Math.floor(date.getHours() / 12) > 0 ? "PM" : "AM"
         if (date.toTimeString() == "Invalid Date") {
-            return ""
+            return "";
         }
         const options: Intl.DateTimeFormatOptions = {
             year: 'numeric',

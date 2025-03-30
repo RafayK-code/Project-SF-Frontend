@@ -18,7 +18,7 @@ function MessageThread(props: MessageThreadProps) {
 
   //called when the thread is clicked
   const onClick = () => {
-    router.push(`/messaging?messageId=${props.chatId}&userId=${userId}`);
+    router.push(`/messaging?chatId=${props.chatId}&userId=${userId}`);
   };
   const shortenedText = (): string => {
     let maxLength = 33;

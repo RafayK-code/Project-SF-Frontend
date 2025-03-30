@@ -1,9 +1,9 @@
-import { useCourses } from "@/hooks/UseCourses"
 import { Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { Chevron } from "../InboxComponents/MessageThread"
 import { useRouter } from "expo-router"
-import { useMyCourses } from "@/hooks/UseMyCourses"
+import { useMyCourses } from "@/hooks/GetHooks/UseMyCourses"
 import { id } from "@/hooks/TestData"
+import { useCourses } from "@/hooks/GetHooks/UseCourses"
 
 interface HomeSearchResultsProps {
     query: String

@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
         justifyContent: "flex-start",
         flexDirection: "row",
-        width: Dimensions.get('window').width,
     },
     searchContainer: {
         flexDirection: "row",

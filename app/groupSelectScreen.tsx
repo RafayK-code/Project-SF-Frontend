@@ -10,8 +10,9 @@ import {
 import GroupSelectMemberList from "../components/GroupSelectComponents/GroupSelectMemberList";
 import { Member } from "../components/GroupSelectComponents/GroupSelectMember";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useChat } from "@/hooks/UseChat";
+import { useChat } from "@/hooks/GetHooks/UseChat";
 import { url } from "@/hooks/TestData";
+import { useInboxDispatchContext } from "@/hooks/Contexts/InboxContext";
 
 interface GroupChat {
   name: String;
@@ -28,6 +29,8 @@ function GroupSelectScreen() {
   const { userId, chatId } = useLocalSearchParams<{ userId: string, chatId: string }>();
 
   const chat = useChat(Number(chatId))
+
+  const inboxDispatchContext = useInboxDispatchContext()
 
   const getDateOfCreation = () => {
     const date = new Date(chat.chat.create_ts);
@@ -49,7 +52,13 @@ function GroupSelectScreen() {
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json; charset=UTF-8' }
     })
-      .then(res => console.log(res.status))
+      .then(res => {
+        console.log("Chat join status: " + res.status)
+
+        inboxDispatchContext({
+          type: "RELOAD"
+        })
+      })
 
     router.back();
   };

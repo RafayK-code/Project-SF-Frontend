@@ -1,17 +1,16 @@
 import React from "react";
 import { useState } from "react";
-import { Input } from "@/components/ui/Input";
 import { KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native";
 import { View, Text, ScrollView, StyleSheet, SafeAreaView } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useRouter } from "expo-router";
-import { useInbox } from "@/hooks/useInbox";
-import { useKeyboardShown } from "@/hooks/useKeyboardShown";
 import HomeSearchResults from "@/components/HomeComponents/HomeSearchResults";
 import { id } from "@/hooks/TestData";
 import HomeInboxCard from "@/components/HomeComponents/HomeInboxCard";
 import HomeScreenSuggestedCard from "@/components/HomeComponents/HomeSuggestedCard";
 import HomeSearchSection from "@/components/HomeComponents/HomeSearchSection";
+import { useInboxContext, useInboxDispatchContext } from "@/hooks/Contexts/InboxContext";
+import { useKeyboardWillShow } from "@/hooks/useKeyboardShown";
 
 const HomePage = () => {
   const router = useRouter();
@@ -27,9 +26,10 @@ const HomePage = () => {
   };
 
 
-  const isKeyboardUp = useKeyboardShown();
+  const isKeyboardUp = useKeyboardWillShow()
 
-  const inbox = useInbox(1)
+  const inboxContext = useInboxContext();
+
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor }]}>
@@ -78,9 +78,9 @@ const HomePage = () => {
                     <Text style={[styles.inboxTitle, { color: "183c30" }]}>Inbox →</Text>
                   </TouchableOpacity>
 
-                  <ScrollView>
-                    {inbox ? inbox.chats.map((message, index: number) => (
-                      <HomeInboxCard key={index} chatName={message.name} chatId={message.id} messageTime={message.latest_message ? message.latest_message.create_ts : ""} messageContent={message.latest_message ? message.latest_message.content : ""}></HomeInboxCard>
+                  <ScrollView showsVerticalScrollIndicator={false}>
+                    {inboxContext.chats != undefined ? inboxContext.chats.map((message, index: number) => (
+                      <HomeInboxCard key={index} chatName={message.name} chatId={message.id} messageTime={message.latest_message != undefined ? message.latest_message.create_ts : ""} messageContent={message.latest_message ? message.latest_message.content : ""}></HomeInboxCard>
                     )) : undefined}
                   </ScrollView>
                 </View>

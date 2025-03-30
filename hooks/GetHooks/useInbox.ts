@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { url } from "./TestData";
+import { url } from "../TestData";
 
 
 export interface Chat {
@@ -53,13 +53,39 @@ export function useInbox(userId: number): Inbox {
 
     useEffect(() => {
 
-        fetch(url + "/read/user/" + userId + "/chats")
-            .then((value) => value.json())
-            .then((res: Chat[]) => {
-                setInbox(res)
+        getInbox(userId)
+            .then(chats => {
+                setInbox(chats)
                 setHasHydrated(true)
             })
     }, [])
 
     return { chats: inbox, hasHydrated: hasHydrated }
+}
+
+
+/**
+ *  The non hook version of getInbox, gets the inbox based on the userId supplied
+ * 
+ * @param userId - the id which the inbox will be fetched from
+ * 
+ * @returns a promise which will return the inbox of the user
+ */
+export function getInbox(userId: number): Promise<Chat[]> {
+    return fetch(url + "/read/user/" + userId + "/chats")
+        .then((value) => {
+            if (value.status == 200) {
+                return value.json()
+            } else {
+                return []
+            }
+        }
+        )
+        .then((res: Chat[]) => {
+            return res
+        })
+        .catch(() => {
+            return [];
+        })
+
 }
