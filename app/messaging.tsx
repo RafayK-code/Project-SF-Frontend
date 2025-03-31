@@ -67,7 +67,6 @@ export default function MessagingScreen() {
   const keyboardUp = useKeyboardDidShow()
 
   useEffect(() => {
-    console.log("called")
     messagesScrollRef.current?.scrollToEnd({ animated: true })
   }, [keyboardUp, messagesScrollRef])
 

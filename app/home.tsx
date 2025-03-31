@@ -51,7 +51,7 @@ const HomePage = () => {
               <View style={styles.mainContainer}>
 
                 {/* Suggested Section */}
-                <Text style={[styles.inboxTitle, { color: textColor }]}>Suggested for you</Text>
+                <Text style={[styles.suggestedTitle, { color: textColor }]}>Suggested for you</Text>
                 <ScrollView style={styles.suggestionsContainer} horizontal={true} showsHorizontalScrollIndicator={false}>
                   {[
                     {
@@ -75,7 +75,7 @@ const HomePage = () => {
                 <View style={styles.inboxContainer}>
 
                   <TouchableOpacity style={styles.inboxHeader} onPress={navigateToInboxScreen}>
-                    <Text style={[styles.inboxTitle, { color: "183c30" }]}>Inbox →</Text>
+                    <Text style={[styles.inboxTitle, { color: "183c30" }]}>Inbox <Text style={{ fontWeight: 300 }}>→</Text></Text>
                   </TouchableOpacity>
 
                   <ScrollView showsVerticalScrollIndicator={false}>
@@ -135,6 +135,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   inboxTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    paddingHorizontal: 16
+  },
+  suggestedTitle: {
     fontSize: 18,
     fontWeight: "bold",
     paddingHorizontal: 16

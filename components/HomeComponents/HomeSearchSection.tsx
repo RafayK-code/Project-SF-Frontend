@@ -1,7 +1,8 @@
 import { useRouter } from "expo-router"
-import { TouchableOpacity, View, Text, StyleSheet } from "react-native"
+import { TouchableOpacity, View, Text, StyleSheet, TextInput } from "react-native"
 import { Input } from "../ui/Input"
 import { useThemeColor } from "@/hooks/useThemeColor"
+import { SearchIcon } from "../InboxComponents/InboxFilter"
 
 interface HomeSearchSectionProps {
     query: string
@@ -21,19 +22,21 @@ function HomeSearchSection(props: HomeSearchSectionProps) {
 
     return (
         <View style={styles.searchContainer}>
-            <View style={styles.searchInput}>
-                <Input
-                    placeholder="Search for a course"
+            <View style={styles.searchBarContainer}>
+                <SearchIcon></SearchIcon>
+                <TextInput
+                    style={styles.input}
                     value={props.query}
-                    onChangeText={(text) => { props.setQuery(text) }}
-                    style={{ backgroundColor: "#fdfaf1" }}
-                />
+                    onChangeText={text => props.setQuery(text)}
+                    placeholder="Search Inbox"
+                    placeholderTextColor="#3D404AA0"
+                ></TextInput>
             </View>
             <TouchableOpacity
                 onPress={navigateToProfile}
                 style={styles.profileButton}
             >
-                <Text style={{ color: textColor }}>Profile</Text>
+                <View style={styles.profileButton}></View>
             </TouchableOpacity>
         </View>
     )
@@ -48,7 +51,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginBottom: 16,
         alignItems: "center",
-        paddingHorizontal: 15,
+        paddingHorizontal: 10,
 
     },
     searchInput: {
@@ -56,9 +59,23 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     profileButton: {
-        backgroundColor: "#ccc",
+        backgroundColor: "#3D404A",
+        padding: 12,
+        borderRadius: 100,
+    },
+    searchBarContainer: {
+        flexDirection: "row",
+        flex: 1,
         padding: 8,
-        borderRadius: 16,
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "#3D404A",
+        borderRadius: 13,
+        backgroundColor: "#FDFBF1",
+        marginHorizontal: 10
+    },
+    input: {
+        fontSize: 18,
     }
 });
 

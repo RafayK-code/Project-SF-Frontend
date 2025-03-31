@@ -160,7 +160,7 @@ function Inbox() {
         ></InboxFilter>
 
         {/* The main messages threads section*/}
-        <ScrollView style={styles.threadsContainer}>
+        <ScrollView style={styles.threadsContainer} showsVerticalScrollIndicator={false}>
           {getMessageThreads().map(
             (thread: Chat, index: number) => {
               const threadLabel: string = ((): string => {
