@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   inboxContainer: {
     flex: 1,
-    paddingHorizontal: 8
+    paddingHorizontal: 25
   },
   inboxHeader: {
     flexDirection: "row",

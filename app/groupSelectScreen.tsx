@@ -12,7 +12,8 @@ import { Member } from "../components/GroupSelectComponents/GroupSelectMember";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useChat } from "@/hooks/GetHooks/UseChat";
 import { url } from "@/hooks/TestData";
-import { useInboxDispatchContext } from "@/hooks/Contexts/InboxContext";
+import { useInboxContext, useInboxDispatchContext } from "@/hooks/Contexts/InboxContext";
+import { useMessageDispatchContext } from "@/hooks/Contexts/MessagesContext";
 
 interface GroupChat {
   name: String;
@@ -30,7 +31,11 @@ function GroupSelectScreen() {
 
   const chat = useChat(Number(chatId))
 
+  const inboxContext = useInboxContext();
+
   const inboxDispatchContext = useInboxDispatchContext()
+  const messagesDispatchContext = useMessageDispatchContext();
+
 
   const getDateOfCreation = () => {
     const date = new Date(chat.chat.create_ts);
@@ -41,6 +46,10 @@ function GroupSelectScreen() {
     router.back();
   };
   const joinGroup = () => {
+    if (isMember()) {
+      return;
+    }
+
     const body = {
       user_id: Number(userId),
       chat_id: Number(chatId)
@@ -55,13 +64,26 @@ function GroupSelectScreen() {
       .then(res => {
         console.log("Chat join status: " + res.status)
 
-        inboxDispatchContext({
-          type: "RELOAD"
-        })
+        inboxDispatchContext({ type: "RELOAD" })
+
+        messagesDispatchContext({ type: "GETNEWCHATS" })
       })
+
 
     router.back();
   };
+  const isMember = (): boolean => {
+    return inboxContext.chats.findIndex((chat) => {
+      return chat.id == Number(chatId)
+    }) != -1
+  }
+
+  const groupRatio = () => {
+    if (chat.chat.member_limit != null) {
+      return chat.chat.member_count + "/" + chat.chat.member_limit
+    }
+    return chat.chat.member_count + " Member" + (chat.chat.member_count != 1 ? "s" : "")
+  }
 
   return (
     <>
@@ -78,7 +100,7 @@ function GroupSelectScreen() {
 
         {/* Member Amounts */}
         <Text style={styles.groupMemberCount}>
-          {chat.chat.member_count + "/" + chat.chat.member_limit}
+          {groupRatio()}
         </Text>
 
         {/* Group Chat Name */}
@@ -104,7 +126,8 @@ function GroupSelectScreen() {
         ></GroupSelectMemberList>
 
         {/* Join Button */}
-        <TouchableOpacity onPress={joinGroup}>
+        {isMember() ? <Text style={styles.warningText}>{"You are already a member"}</Text> : undefined}
+        <TouchableOpacity onPress={joinGroup} style={{ opacity: isMember() ? 0.5 : 1 }}>
           <Text style={styles.joinButton}>
             {!chat.chat.is_public ? "Request To Join" : "Join Now"}
           </Text>
@@ -172,6 +195,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 10,
   },
+  warningText: {
+    fontSize: 12,
+    backgroundColor: "#F4D84C",
+    paddingVertical: 3,
+    paddingHorizontal: 10,
+    borderRadius: 100,
+    color: "#3D404A"
+  }
 });
 
 export default GroupSelectScreen;

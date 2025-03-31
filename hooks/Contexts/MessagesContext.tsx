@@ -7,7 +7,8 @@ import { id } from '../TestData';
 
 // The default value for the reducer
 const initialMessages: MessageContext = {
-    messages: []
+    messages: [],
+    state: "SHOULDRELOAD"
 }
 
 // Message context
@@ -21,6 +22,7 @@ interface MessageContext {
         state: "READY" | "LOADING" | "SHOULDLOAD",
         chatId: number
     }[]
+    state: "SHOULDRELOAD" | "READY" | "LOADING"
 }
 
 const MessageDispatchContext = createContext<React.Dispatch<MessageAction>>(() => null);
@@ -40,8 +42,10 @@ export function useMessageContext() {
  * 
  *  Possible actions that can be made on a chat
  *  - RELOAD - causes a fetch of the data and will be updated when the request comes back, chatId must be defined
+ *  - GETNEWCHATS - this adds any new chats the user might have created or got added to, nothing should be passed in
  *  - SET - allows a specific chat to be set, this is not recommended to be use, this is used for internal functions, chatId and messages must both be defined 
  *  - LOADING - this sets the chat to the loading state, this is not recommended to be used, this is used for internal functions, chatId must be defined
+ *  - GLOABALLOADING - this sets the state of the entire context, this denotes that it is currently fetching any new chats, this is for internal use, should not be used outside
  *  - INSERT - this inserts a new chat, both chatId and messages must be defined
  * 
  *  The data can be read from useMessagesContext()
@@ -79,25 +83,24 @@ export function MessagesProvider(props: MessageProviderProps) {
                     })
             }
         })
+        // This looks for any new chats and adds them
+        if (messages.state == "SHOULDRELOAD") {
+            getInbox(id)
+                .then(inbox => {
+                    // Loops through all the chats in the inbox
+                    inbox.forEach(chat => {
+                        // If the chat is not in the messages then adds it
+                        if (messages.messages.findIndex(mesg => mesg.chatId == chat.id) == -1) {
+                            getMessages(chat.id)
+                                .then(mesg => {
+                                    dispatch({ type: "INSERT", messages: mesg, chatId: chat.id })
+                                })
+                        }
+                    })
+                })
+        }
     }, [messages])
 
-    // gets the messsages initally, this should only happen on load
-    // this should be changed to loading from persistant state and
-    // only updating if the most recent chat is past the past update time
-    // this is future feature
-    useEffect(() => {
-        // Gets the inbox
-        getInbox(id)
-            .then(inbox => {
-                // Loops through all the chats in the inbox and inserts them accordingly
-                inbox.forEach(chat => {
-                    getMessages(chat.id)
-                        .then(mesg => {
-                            dispatch({ type: "INSERT", messages: mesg, chatId: chat.id })
-                        })
-                })
-            })
-    }, [])
 
     // Contexts are provided to the children
     return (
@@ -124,6 +127,10 @@ type MessageAction = {
     type: "INSERT",
     chatId: number,
     messages: MessageReturn
+} | {
+    type: "GETNEWCHATS"
+} | {
+    type: "GLOBALLOADING"
 }
 
 
@@ -145,7 +152,8 @@ function messagesReducer(allMessages: MessageContext, action: MessageAction): Me
                 return messg.chatId != action.chatId
             })
             return {
-                messages: [mesg, ...messages]
+                messages: [mesg, ...messages],
+                state: "READY"
             }
         }
         case "LOADING": {
@@ -160,7 +168,8 @@ function messagesReducer(allMessages: MessageContext, action: MessageAction): Me
                 return messg.chatId != action.chatId
             })
             return {
-                messages: [mesg, ...messages]
+                messages: [mesg, ...messages],
+                state: "READY"
             }
         }
         case "SET": {
@@ -175,7 +184,8 @@ function messagesReducer(allMessages: MessageContext, action: MessageAction): Me
                 return messg.chatId != action.chatId
             })
             return {
-                messages: [mesg, ...messages]
+                messages: [mesg, ...messages],
+                state: "READY"
             }
         }
         case "INSERT": {
@@ -184,8 +194,20 @@ function messagesReducer(allMessages: MessageContext, action: MessageAction): Me
                     chats: action.messages,
                     state: "READY",
                     chatId: action.chatId
-                }]
-
+                }],
+                state: "READY"
+            }
+        }
+        case "GETNEWCHATS": {
+            return {
+                messages: [...allMessages.messages],
+                state: "SHOULDRELOAD"
+            }
+        }
+        case "GLOBALLOADING": {
+            return {
+                messages: [...allMessages.messages],
+                state: "LOADING"
             }
         }
         default: {

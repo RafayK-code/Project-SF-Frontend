@@ -8,7 +8,7 @@ import EllipseButton from "./EllipseButton";
 import PageBackButton from "../PageBackButton";
 
 interface MessagingScreenHeaderProps {
-    groupName: String,
+    groupName: string,
     goBack: () => void
 }
 
@@ -21,6 +21,12 @@ function MessageScreenHeader(props: MessagingScreenHeaderProps) {
     const tapEllipse = () => {
 
     }
+    const shortenedText = (text: string, length: number): string => {
+        if (text.length > length) {
+            return text.substring(0, length).trim() + "...";
+        }
+        return text;
+    };
 
     return (
         <>
@@ -28,7 +34,7 @@ function MessageScreenHeader(props: MessagingScreenHeaderProps) {
             <View style={styles.header}>
                 <PageBackButton onClick={goBack}></PageBackButton>
 
-                <Text style={styles.headerText}>{props.groupName}</Text>
+                <Text style={styles.headerText}>{shortenedText(props.groupName, 14)}</Text>
 
                 <EllipseButton size={5} onClick={tapEllipse}></EllipseButton>
             </View>

@@ -13,6 +13,7 @@ import GroupCreateSlider from "../components/GroupCreateScreenComponents/groupCr
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { url } from "@/hooks/TestData";
 import { useInboxDispatchContext } from "@/hooks/Contexts/InboxContext";
+import { useMessageDispatchContext } from "@/hooks/Contexts/MessagesContext";
 
 function GroupCreateScreen() {
   const [groupName, setGroupName] = useState("");
@@ -25,6 +26,7 @@ function GroupCreateScreen() {
   const [publicGroup, setPublicGroup] = useState(false);
 
   const inboxDispatchContext = useInboxDispatchContext()
+  const messagesDispatchContext = useMessageDispatchContext();
 
   const onGroupCreate = () => {
     const body = {
@@ -43,9 +45,10 @@ function GroupCreateScreen() {
       .then(res => {
         console.log(res.status)
 
-        inboxDispatchContext({
-          type: "RELOAD"
-        })
+        inboxDispatchContext({ type: "RELOAD" })
+
+        messagesDispatchContext({ type: "GETNEWCHATS" })
+
       })
 
     router.back();

@@ -46,7 +46,7 @@ function HomeSearchResults(props: HomeSearchResultsProps) {
 
 
     return (
-        <ScrollView keyboardShouldPersistTaps="handled" >
+        <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} >
             {getMatchedCourses().map(course => {
                 return (
                     <TouchableOpacity style={styles.result} key={course.id + "Course"} onPress={() => { onResultPress(course.id) }}>
